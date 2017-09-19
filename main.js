@@ -46,6 +46,33 @@
           ]
         }
       ]
+    },
+    {
+      "name": "RandomPokemonIntent",
+      "samples": [
+        "Tell me about a random pokemon",
+        "Random Pokemon",
+        "give me information on a random pokemon",
+        "give me a random pokemon"
+      ],
+      "slots": []
+    },
+    {
+      "name": "WhatTypesBeatTypeIntent",
+      "samples": [
+        "What Types beat {type}",
+        "what beats {type}",
+        "who beats {type}",
+        "{type} weaknesses",
+        "how to beat {type}"
+      ],
+      "slots": [
+        {
+          "name": "type",
+          "type": "type",
+          "samples": []
+        }
+      ]
     }
   ],
   "types": [
@@ -67,6 +94,38 @@
             "value": "type",
             "synonyms": [
               "typing"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "type",
+      "values": [
+        {
+          "id": null,
+          "name": {
+            "value": "type",
+            "synonyms": [
+              "element",
+              "normal",
+              "fire",
+              "water",
+              "electric",
+              "grass",
+              "ice",
+              "fighting",
+              "poison",
+              "ground",
+              "flying",
+              "psychic",
+              "bug",
+              "rock",
+              "ghost",
+              "dragon",
+              "dark",
+              "steel",
+              "fairy"
             ]
           }
         }
