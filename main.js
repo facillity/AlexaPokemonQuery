@@ -13,7 +13,24 @@
       "samples": []
     },
     {
-      "name": "PokemonQueryIntent",
+      "name": "GeneralInfoQueryIntent",
+      "samples": [
+        "Give me info on {pokemon}",
+        "What can you tell me about {pokemon}",
+        "information on {pokemon}",
+        "give me stats on {pokemon}",
+        "what is a {pokemon}"
+      ],
+      "slots": [
+        {
+          "name": "pokemon",
+          "type": "Pokemon",
+          "samples": []
+        }
+      ]
+    },
+    {
+      "name": "PokemonTypeQueryIntent",
       "samples": [
         "What type is {pokemon}",
         "{pokemon} is what type",
@@ -58,7 +75,7 @@
   ],
   "prompts": [
     {
-      "id": "Elicit.Intent-PokemonQueryIntent.IntentSlot-pokemon",
+      "id": "Elicit.Intent-PokemonTypeQueryIntent.IntentSlot-pokemon",
       "promptVersion": "1.0",
       "definitionVersion": "1.0",
       "variations": [
@@ -77,7 +94,7 @@
     "version": "1.0",
     "intents": [
       {
-        "name": "PokemonQueryIntent",
+        "name": "PokemonTypeQueryIntent",
         "confirmationRequired": false,
         "prompts": {},
         "slots": [
@@ -87,7 +104,7 @@
             "elicitationRequired": true,
             "confirmationRequired": false,
             "prompts": {
-              "elicit": "Elicit.Intent-PokemonQueryIntent.IntentSlot-pokemon"
+              "elicit": "Elicit.Intent-PokemonTypeQueryIntent.IntentSlot-pokemon"
             }
           }
         ]
