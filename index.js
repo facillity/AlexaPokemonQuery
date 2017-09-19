@@ -3,12 +3,7 @@
 'use strict';
 const Alexa = require('alexa-sdk');
 
-//=========================================================================================================================================
-//TODO: The items below this comment need your attention.
-//=========================================================================================================================================
 
-//Replace with your app ID (OPTIONAL).  You can find this value at the top of your skill's page on http://developer.amazon.com.
-//Make sure to enclose your value in quotes, like this: const APP_ID = 'amzn1.ask.skill.bb4045e6-b3e8-4133-b650-72923c5980f1';
 const APP_ID = 'amzn1.ask.skill.3557413d-4325-4af9-8760-ca1d13a43eb9'; // come back to and fill from aws
 
 const SKILL_NAME = 'Pokemon Query';
@@ -17,36 +12,151 @@ const HELP_MESSAGE = 'You can ask me what type a Pokemon is, or you can ask me t
 const HELP_REPROMPT = 'What can I help you with?';
 const STOP_MESSAGE = 'Smell ya later!';
 
-//=========================================================================================================================================
-//TODO: Replace this data with your own.  You can find translations of this data at http://github.com/alexa/skill-sample-node-js-fact/data
-//=========================================================================================================================================
-var pikachu = new Object();
-pikachu.name = "pikachu";
-pikachu.type = "electric";
 
-const data = [
-    pikachu
-];
+
+// Pokemon Info
+var bulbasaur = {
+    id: 1,
+    name: "Bulbasaur",
+    primaryType: "Grass",
+    secondaryType: "Poison",
+    evolvesInto: "Ivysaur"
+}
+
+var ivysaur = {
+    id: 2,
+    name: "Ivysaur",
+    primaryType: "Grass",
+    secondaryType: "Poison",
+    evolvesInto: "Venusaur"
+}
+
+var venusaur = {
+    id: 3,
+    name: "venusaur",
+    primaryType: "Grass",
+    secondaryType: "Poison"
+}
+
+var charmander = {
+    id: 4,
+    name: "charmander",
+    primaryType: "Fire",
+    evolvesInto: "Charmeleon"
+}
+
+const pokedex = [
+    bulbasaur,
+    ivysaur,
+    venusaur,
+    charmander
+    ]
+
 
 function GetPokemonID(pokemonName) {
-    if (pokemonName === "pikachu" || pokemonName === "Pikachū")
+    var num = 0;
+    for (var position = 0; position != pokedex.length; position++)
     {
-        return 0;
+        if(pokedex[num].name.toLowerCase() === pokemonName)
+        {
+            return num;
+        }
+        num++;
     }
-    
-    // if name isnt in data
     return -1;
 }
 
-//=========================================================================================================================================
-//Editing anything below this line might break your skill.
-//=========================================================================================================================================
+// Handlers
 
 const handlers = {
     'LaunchRequest': function () {
         this.emit('PokemonQueryIntent');
     },
     'PokemonQueryIntent': function () {
+        var speechOutput = "";
+        speechOutput = "Ask me about a pokemon! I can give you info on its type, its ID, or general info.";
+        
+        const test = "Ask me about a pokemon!";
+        this.response.cardRenderer(SKILL_NAME, test);
+        this.response.speak(speechOutput);
+        this.emit(':responseReady');
+    },
+    'PokemonTypeQueryIntent': function () {
+        const pokemonName = this.event.request.intent.slots.pokemon.value;
+        const pokemonID = GetPokemonID(pokemonName);
+        const pokemonInfo = pokedex[pokemonID];
+        
+        var speechOutput = "";
+        
+        if (pokemonID != -1){
+            speechOutput = pokemonName + " is of type: " + pokemonInfo.primaryType;
+            if (pokemonInfo.secondaryType != undefined)
+            {
+                speechOutput = speechOutput + " and " + pokemonInfo.secondaryType;
+            }
+        }
+        else{
+            speechOutput = "Sorry, " + pokemonName + " is not in my database!";
+        }
+        this.response.cardRenderer(SKILL_NAME, pokemonName);
+        this.response.speak(speechOutput);
+        this.emit(':responseReady');
+    },
+    
+    'GeneralInfoQueryIntent': function () {
+        const pokemonName = this.event.request.intent.slots.pokemon.value;
+        const pokemonID = GetPokemonID(pokemonName);
+        const pokemonInfo = pokedex[pokemonID];
+        
+        var speechOutput = "";
+        
+        if (pokemonID != -1){
+            speechOutput += pokemonName + " is number " + pokemonInfo.id + " in the national Pokedex. "
+            speechOutput += pokemonName + " is of type: " + pokemonInfo.primaryType;
+            if (pokemonInfo.secondaryType != undefined)
+            {
+                speechOutput = speechOutput + " and " + pokemonInfo.secondaryType;
+            }
+            
+            if (pokemonInfo.evolvesInto != undefined) {
+            speechOutput += " ." + pokemonName + " evolves into " + pokemonInfo.evolvesInto;
+            }
+            else {
+            speechOutput += " ." + pokemonName + " is the final stage in its line of evolution.";
+            }
+        }
+        else {
+            speechOutput = "Sorry, " + pokemonName + " is not in my database!";
+        }
+    
+        
+        this.response.cardRenderer(SKILL_NAME, pokemonName);
+        this.response.speak(speechOutput);
+        this.emit(':responseReady');
+    },
+    'AMAZON.HelpIntent': function () {
+        const speechOutput = HELP_MESSAGE;
+        const reprompt = HELP_REPROMPT;
+
+        this.response.speak(speechOutput).listen(reprompt);
+        this.emit(':responseReady');
+    },
+    'AMAZON.CancelIntent': function () {
+        this.response.speak(STOP_MESSAGE);
+        this.emit(':responseReady');
+    },
+    'AMAZON.StopIntent': function () {
+        this.response.speak(STOP_MESSAGE);
+        this.emit(':responseReady');
+    },
+};
+
+exports.handler = function (event, context, callback) {
+    const alexa = Alexa.handler(event, context, callback);
+    alexa.APP_ID = APP_ID;
+    alexa.registerHandlers(handlers);
+    alexa.execute();
+};
         const pokemonName = this.event.request.intent.slots.pokemon.value;
         const pokemonID = GetPokemonID(pokemonName);
         
