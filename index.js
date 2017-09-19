@@ -33,23 +33,61 @@ var ivysaur = {
 
 var venusaur = {
     id: 3,
-    name: "venusaur",
+    name: "Venusaur",
     primaryType: "Grass",
     secondaryType: "Poison"
 }
 
 var charmander = {
     id: 4,
-    name: "charmander",
+    name: "Charmander",
     primaryType: "Fire",
     evolvesInto: "Charmeleon"
+}
+
+var charmeleon = {
+    id: 5,
+    name: "Charmeleon",
+    primaryType: "Fire",
+    evolvesInto: "Charizard"
+}
+
+var charizard = {
+    id: 6,
+    name: "Charizard",
+    primaryType: "Fire",
+}
+
+var squirtle = {
+    id: 7,
+    name: "Squirtle",
+    primaryType: "Water",
+    evolvesInto: "Wartortle"
+}
+
+var wartortle = {
+    id: 8,
+    name: "Wartortle",
+    primaryType: "Water",
+    evolvesInto: "Blastoise"
+}
+
+var blastoise = {
+    id: 9,
+    name: "Blastoise",
+    primaryType: "Water",
 }
 
 const pokedex = [
     bulbasaur,
     ivysaur,
     venusaur,
-    charmander
+    charmander,
+    charmeleon,
+    charizard,
+    squirtle,
+    wartortle,
+    blastoise
     ]
 
 
@@ -130,49 +168,6 @@ const handlers = {
         }
     
         
-        this.response.cardRenderer(SKILL_NAME, pokemonName);
-        this.response.speak(speechOutput);
-        this.emit(':responseReady');
-    },
-    'AMAZON.HelpIntent': function () {
-        const speechOutput = HELP_MESSAGE;
-        const reprompt = HELP_REPROMPT;
-
-        this.response.speak(speechOutput).listen(reprompt);
-        this.emit(':responseReady');
-    },
-    'AMAZON.CancelIntent': function () {
-        this.response.speak(STOP_MESSAGE);
-        this.emit(':responseReady');
-    },
-    'AMAZON.StopIntent': function () {
-        this.response.speak(STOP_MESSAGE);
-        this.emit(':responseReady');
-    },
-};
-
-exports.handler = function (event, context, callback) {
-    const alexa = Alexa.handler(event, context, callback);
-    alexa.APP_ID = APP_ID;
-    alexa.registerHandlers(handlers);
-    alexa.execute();
-};
-        const pokemonName = this.event.request.intent.slots.pokemon.value;
-        const pokemonID = GetPokemonID(pokemonName);
-        
-       // const factArr = data;
-        //const factIndex = Math.floor(Math.random() * factArr.length);
-        //const randomFact = factArr[factIndex];
-        //const speechOutput = GET_FACT_MESSAGE + randomFact;
-        
-        var speechOutput = "";
-        
-        if (pokemonID != -1){
-            speechOutput = pokemonName + " is of type: " + data[pokemonID].type;
-        }
-        else{
-            speechOutput = "Sorry, " + pokemonName + " is not in my database!";
-        }
         this.response.cardRenderer(SKILL_NAME, pokemonName);
         this.response.speak(speechOutput);
         this.emit(':responseReady');
